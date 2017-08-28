@@ -62,33 +62,21 @@ class BTSPServer:
                 uuid = param.get("uuid")
                 iface = param.get("iface")
                 v = wifi.activateWifiConnection(uuid, iface)
-                if v.get("error"):
-                    return v, CLOSE
-                else:
-                    return v, CLOSE
+                return v, CLOSE
             elif req == "createWifiConnection":
                 ssid = param.get("ssid")
                 passwd = param.get("password")
                 iface = pararm.get("iface")
                 v = wifi.createWifiConnection(ssid, passwd, iface)
-                if v.get("error"):
-                    return v, CLOSE
-                else:
-                    return v, CLOSE
+                return v, CLOSE
             elif req == "deleteWifiConnection":
                 uuid = param.get("uuid")
                 v = wifi.deleteWifiConnection(uuid)
-                if v.get("error"):
-                    return v, CLOSE
-                else:
-                    return v, CLOSE
+                return v, CLOSE
             elif req == "disconnectWifi":
                 iface = param.get("iface")
                 v = wifi.disconnectWifi(iface)
-                if v.get("error"):
-                    return v, CLOSE
-                else:
-                    return v, CLOSE
+                return v, CLOSE
             else:
                 return {"error": "unknown request"}, True
             # end of handleRequest()
