@@ -8,4 +8,4 @@ def parse(b):
 
 def strip(b):
     s = jsonlpendec.from_bytes(b)
-    return s.rstrip('\n')
+    return s.replace("\n\n", "\n").rstrip('\n')
