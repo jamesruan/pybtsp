@@ -66,7 +66,7 @@ class BTSPServer:
             elif req == "createWifiConnection":
                 ssid = param.get("ssid")
                 passwd = param.get("password")
-                iface = pararm.get("iface")
+                iface = param.get("iface")
                 v = wifi.createWifiConnection(ssid, passwd, iface)
                 return v, CLOSE
             elif req == "deleteWifiConnection":
