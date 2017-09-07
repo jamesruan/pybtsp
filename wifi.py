@@ -72,7 +72,7 @@ def activateWifiConnection(uuid, iface = None):
     else:
         return {"error": out}
 
-def createWifiConnection(ssid, password = None, iface=None):
+def createWifiConnection(ssid, password = None, iface=None, name=None):
     timeout = '20'
     if ssid == None:
         return {"error": "invalid parameter"}
@@ -83,6 +83,9 @@ def createWifiConnection(ssid, password = None, iface=None):
     if iface:
         args.append("ifname")
         args.append(iface)
+    if name:
+        args.append("name")
+        args.append(name)
     ok, out = runSubProc(args)
     if ok:
         return {"msg": nmcli.strip(out)}
