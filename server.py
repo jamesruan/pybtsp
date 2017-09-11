@@ -89,8 +89,8 @@ class BTSPServer:
                 socket.settimeout(None)
                 logging.info('<- {!s}'.format(msg))
             except btcommon.BluetoothError as e:
-                logging.info(e)
-                return False
+                logging.info('BluetoothError', e)
+                return True
 
             reply, what_to_do = handleRequest(msg)
             logging.info('-> {!s}'.format(reply))
@@ -99,8 +99,8 @@ class BTSPServer:
             try:
                 encodeTo(socket, msg)
             except btcommon.BluetoothError as e:
-                logging.info(e)
-                return False
+                logging.info('BluetoothError', e)
+                return True
 
             if what_to_do == CLOSE:
                 return True
