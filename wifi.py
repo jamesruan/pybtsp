@@ -45,6 +45,57 @@ def getEthernetInterface():
     else:
         return {"error": out}
 
+def getInterfaceDetail(iface):
+    args = ['env', 'LC_ALL=C', 'nmcli', '-t', 'device', 'show', iface]
+    ok, out = runSubProc(args)
+    if ok:
+        va = nmcli.parseShow(out)
+        r = {}
+        r['general'] = {}
+        for i in va:
+            (k, v) = i
+            if k.startswith('GENERAL'):
+                if not r.get('general'):
+                    r['general'] = {}
+            elif k.startswith('IP4'):
+                if not r.get('ipv4'):
+                    r['ipv4'] = {}
+            elif k.startswith('IP6'):
+                if not r.get('ipv6'):
+                    r['ipv6'] = {}
+
+            if k == 'GENERAL.HWADDR':
+                r['general']['hdaddr'] = v
+            elif k == 'GENERAL.STATE':
+                r['general']['state'] = v
+            elif k == 'GENERAL.CONNECTION':
+                r['general']['connection'] = v
+            elif k.startswith('IP4.ADDRESS'):
+                if not r['ipv4'].get('address'):
+                    r['ipv4']['address'] = []
+                r['ipv4']['address'].append(v)
+            elif k.startswith('IP4.DNS'):
+                if not r['ipv4'].get('dns'):
+                    r['ipv4']['dns'] = []
+                r['ipv4']['dns'].append(v)
+            elif k.startswith('IP4.GATEWAY'):
+                r['ipv4']['gateway'] = v
+            elif k.startswith('IP6.ADDRESS'):
+                if not r['ipv6'].get('address'):
+                    r['ipv6']['address'] = []
+                r['ipv6']['address'].append(v)
+            elif k.startswith('IP6.GATEWAY'):
+                r['ipv6']['gateway'] = v
+            elif k.startswith('IP6.DNS'):
+                if not r['ipv6'].get('dns'):
+                    r['ipv6']['dns'] = []
+                r['ipv6']['dns'].append(v)
+            elif k == 'WIRED-PROPERTIES.CARRIER':
+                r['wirestate'] = v
+
+        return r
+    else:
+        return {"error", out}
 
 def getScanResult():
     fields = 'SSID,MODE,CHAN,RATE,SIGNAL,SECURITY'
@@ -144,6 +195,7 @@ def disconnect(iface):
         return {"error": out}
 
 if __name__ == "__main__":
+    print(getInterfaceDetail('eth0'))
     print(getWifiInterface())
     print(getEthernetInterface())
     print(getScanResult())

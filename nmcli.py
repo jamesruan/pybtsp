@@ -11,6 +11,15 @@ def parse(b):
     r = [splitcolumn(x) for x in sa if len(x) > 0] 
     return r
 
+def parseShow(b):
+    s = strip(b)
+    sa = re.split('\n', s)
+    def splitcolumn(i):
+        return tuple(re.split(r':', i, 1))
+
+    r = [splitcolumn(x) for x in sa if len(x) > 0]
+    return r
+
 def strip(b):
     s = jsonlpendec.from_bytes(b)
     return s.replace("\n\n", "\n").rstrip('\n')
