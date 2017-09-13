@@ -30,6 +30,22 @@ def getWifiInterface():
     else:
         return {"error": out}
 
+def getEthernetInterface():
+    fields = 'DEVICE,TYPE,STATE'
+    args = ['env', 'LC_ALL=C', 'nmcli', '-t', '-f', fields, 'device']
+    ok, out = runSubProc(args)
+    if ok:
+        va =  nmcli.parse(out)
+        r = {}
+        for i in va:
+            device, type, state = i
+            if type == "ethernet" and state != "unmanaged":
+                r[device] = state
+        return r
+    else:
+        return {"error": out}
+
+
 def getScanResult():
     fields = 'SSID,MODE,CHAN,RATE,SIGNAL,SECURITY'
     args = ['env', 'LC_ALL=C', 'nmcli', '-t', '-f', fields, 'device', 'wifi']
@@ -59,7 +75,22 @@ def getWifiConnection():
     else:
         return {"error": out}
 
-def activateWifiConnection(uuid, iface = None):
+def getEthernetConnection():
+    fields = 'NAME,UUID,TYPE,DEVICE'
+    args = ['env', 'LC_ALL=C', 'nmcli', '-t', '-f', fields, 'connection']
+    ok, out = runSubProc(args)
+    if ok:
+        va =  nmcli.parse(out)
+        r = {}
+        for i in va:
+            name, uuid, type, device = i
+            if type == "802-3-ethernet":
+                r[uuid] = {"name": name, "device": device}
+        return r
+    else:
+        return {"error": out}
+
+def activateConnection(uuid, iface = None):
     if uuid == None:
         return {"error": "invalid parameter"}
     args = ['env', 'LC_ALL=C', 'nmcli', 'connection', 'up', uuid]
@@ -92,7 +123,7 @@ def createWifiConnection(ssid, password = None, iface=None, name=None):
     else:
         return {"error": out}
 
-def deleteWifiConnection(uuid):
+def deleteConnection(uuid):
     if uuid == None:
         return {"error": "invalid parameter"}
     args = ['env', 'LC_ALL=C', 'nmcli', 'connection', 'delete', uuid]
@@ -102,7 +133,7 @@ def deleteWifiConnection(uuid):
     else:
         return {"error": out}
 
-def disconnectWifi(iface):
+def disconnect(iface):
     if iface == None:
         return {"error": "invalid parameter"}
     args = ['env', 'LC_ALL=C', 'nmcli', 'device', 'disconnect', iface]
@@ -114,5 +145,6 @@ def disconnectWifi(iface):
 
 if __name__ == "__main__":
     print(getWifiInterface())
+    print(getEthernetInterface())
     print(getScanResult())
     print(getWifiConnection())

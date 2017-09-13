@@ -52,16 +52,20 @@ class BTSPServer:
             import wifi
             req = msg.get("request")
             param = msg.get("param")
-            if req == "getWifiInterface":
+            if req == "getEthernetInterface":
+                return wifi.getEthernetInterface(), CLOSE
+            elif req == "getWifiInterface":
                 return wifi.getWifiInterface(), CLOSE
             elif req == "getScanResult":
                 return wifi.getScanResult(), CLOSE
+            elif req == "getEthernetConnection":
+                return wifi.getEthernetConnection(), CLOSE
             elif req == "getWifiConnection":
                 return wifi.getWifiConnection(), CLOSE
-            elif req == "activateWifiConnection":
+            elif req == "activateConnection":
                 uuid = param.get("uuid")
                 iface = param.get("iface")
-                v = wifi.activateWifiConnection(uuid, iface)
+                v = wifi.activateConnection(uuid, iface)
                 return v, CLOSE
             elif req == "createWifiConnection":
                 ssid = param.get("ssid")
@@ -70,13 +74,13 @@ class BTSPServer:
                 name = param.get("name")
                 v = wifi.createWifiConnection(ssid, passwd, iface, name)
                 return v, CLOSE
-            elif req == "deleteWifiConnection":
+            elif req == "deleteConnection":
                 uuid = param.get("uuid")
-                v = wifi.deleteWifiConnection(uuid)
+                v = wifi.deleteConnection(uuid)
                 return v, CLOSE
-            elif req == "disconnectWifi":
+            elif req == "disconnect":
                 iface = param.get("iface")
-                v = wifi.disconnectWifi(iface)
+                v = wifi.disconnect(iface)
                 return v, CLOSE
             else:
                 return {"error": "unknown request"}, True
