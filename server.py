@@ -131,7 +131,7 @@ def set_piscan():
 
 def main():
     logging.basicConfig(
-            filename='server.log',
+            filename='/var/log/pybtsp.log',
             level=logging.DEBUG,
             #filemode='w',
             format='%(asctime)s - %(levelname)s - %(message)s')
