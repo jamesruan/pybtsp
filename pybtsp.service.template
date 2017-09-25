@@ -1,6 +1,6 @@
 [Unit]
 Description=Python BTSP Server
-After=NetworkManager.service bluetooth.target
+After=NetworkManager.service bluetooth.target sys-subsystem-bluetooth-devices-hci0.device
 
 [Service]
 Type=simple
