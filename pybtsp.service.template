@@ -1,0 +1,10 @@
+[Unit]
+Description=Python BTSP Server
+After=NetworkManager.service bluetooth.target
+
+[Service]
+Type=simple
+ExecStart={pwd}/server.py
+
+[Install]
+WantedBy=multi-user.target
