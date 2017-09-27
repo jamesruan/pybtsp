@@ -64,7 +64,7 @@ class BTSPServer:
                 return wifi.getWifiConnection(), CLOSE
             elif req == "getInterfaceDetail":
                 iface = param.get('iface')
-                v = wifi.getInterfaceDetail(iface), CLOSE
+                v = wifi.getInterfaceDetail(iface)
                 return v, CLOSE
             elif req == "activateConnection":
                 uuid = param.get("uuid")
